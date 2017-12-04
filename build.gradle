@@ -1,0 +1,23 @@
+subprojects {
+	apply plugin: 'java'
+
+	repositories {
+		mavenCentral()
+	}
+}
+
+project(':api') {
+	apply plugin: 'java'
+
+	repositories {
+		mavenCentral()
+	}
+}
+
+project(':domain') {
+	apply plugin: 'java'
+
+	repositories {
+		mavenCentral()
+	}
+}
