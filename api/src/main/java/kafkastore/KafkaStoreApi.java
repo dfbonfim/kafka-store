@@ -1,4 +1,4 @@
-package com.dfbonfim.kafkastore;
+package kafkastore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

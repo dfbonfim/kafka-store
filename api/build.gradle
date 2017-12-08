@@ -10,7 +10,6 @@ apply plugin: 'org.springframework.boot'
 
 jar {
     baseName = 'kafka-store-api'
-    version = '1.0'
 }
 sourceCompatibility = 1.8
 
