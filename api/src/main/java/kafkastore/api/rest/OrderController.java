@@ -1,6 +1,6 @@
-package kafkastore.rest;
+package kafkastore.api.rest;
 
-import kafkastore.resource.OrderResource;
+import kafkastore.api.resource.OrderResource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

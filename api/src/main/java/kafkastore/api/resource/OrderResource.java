@@ -1,4 +1,4 @@
-package kafkastore.resource;
+package kafkastore.api.resource;
 
 import java.math.BigDecimal;
 

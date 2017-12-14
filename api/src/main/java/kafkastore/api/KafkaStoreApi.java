@@ -1,4 +1,4 @@
-package kafkastore;
+package kafkastore.api;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
