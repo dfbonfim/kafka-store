@@ -1,5 +1,12 @@
 subprojects {
+
+	buildscript {
+		repositories { mavenCentral() }
+	}
+
 	apply plugin: 'java'
+
+	sourceCompatibility = 1.8
 
 	repositories {
 		mavenCentral()
@@ -7,17 +14,7 @@ subprojects {
 }
 
 project(':api') {
-	apply plugin: 'java'
-
-	repositories {
-		mavenCentral()
-	}
 }
 
 project(':domain') {
-	apply plugin: 'java'
-
-	repositories {
-		mavenCentral()
-	}
 }
