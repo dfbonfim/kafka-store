@@ -11,6 +11,6 @@ jar {
 
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
-//    compile project(':core')
+    compile project(':domain')
     testCompile('org.springframework.boot:spring-boot-starter-test')
 }
