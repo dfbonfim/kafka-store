@@ -1,0 +1,15 @@
+plugins { id "io.spring.dependency-management" version "1.0.0.RELEASE" }
+
+dependencyManagement {
+    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:1.5.9.RELEASE") }
+}
+
+repositories {
+    maven {
+        url "http://packages.confluent.io/maven/"
+    }
+}
+
+dependencies {
+    compile 'org.apache.kafka.kafka-streams:0.11.0.0-cp1'
+}
