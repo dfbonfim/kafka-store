@@ -1,8 +1,10 @@
-plugins { id "io.spring.dependency-management" version "1.0.0.RELEASE" }
-
-dependencyManagement {
-    imports { mavenBom("org.springframework.boot:spring-boot-dependencies:1.5.9.RELEASE") }
+buildscript {
+    ext { springBootVersion = '1.5.9.RELEASE' }
+    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
 }
+
+apply plugin: 'org.springframework.boot'
+
 
 repositories {
     maven {
@@ -11,5 +13,10 @@ repositories {
 }
 
 dependencies {
-    compile 'org.apache.kafka.kafka-streams:0.11.0.0-cp1'
+    compile project(':domain')
+    compile 'org.apache.kafka:kafka-streams:0.11.0.0-cp1'
+}
+
+jar {
+    baseName = 'kafka-store-event'
 }
