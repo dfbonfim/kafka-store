@@ -4,8 +4,9 @@ services:
       build: api/.
       ports:
         - "8080:8080"
-      links:
+      depends_on:
         - mysql
+        - kafka
       environment:
         MYSQL_DB_HOST: mysql
         MYSQL_DB_USER: root
@@ -28,3 +29,18 @@ services:
         MYSQL_ROOT_PASSWORD: root
       volumes:
         - ./scripts/mysql/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+
+    zookeeper:
+      image: debezium/zookeeper
+      ports:
+        - "2181:2181"
+
+    kafka:
+      image: debezium/kafka
+      ports:
+        - "9092:9092"
+      environment:
+        ZOOKEEPER_CONNECT: zookeeper:2181
+        KAFKA_DELETE_TOPIC_ENABLE: "true"
+      depends_on:
+        - "zookeeper"

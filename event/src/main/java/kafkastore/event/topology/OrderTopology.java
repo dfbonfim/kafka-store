@@ -10,6 +10,11 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
+import static org.apache.kafka.streams.StreamsConfig.APPLICATION_ID_CONFIG;
+import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
+import static org.apache.kafka.streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG;
+import static org.apache.kafka.streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG;
+
 @Configuration
 public class OrderTopology {
 
@@ -33,6 +38,13 @@ public class OrderTopology {
     }
 
     private Properties getProperties(){
-        return new Properties();
+        Properties streamsConfiguration = new Properties();
+
+        streamsConfiguration.put(APPLICATION_ID_CONFIG, "kafkastore");
+        streamsConfiguration.put(BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        streamsConfiguration.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+        streamsConfiguration.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+
+        return streamsConfiguration;
     }
 }
