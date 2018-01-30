@@ -29,6 +29,7 @@ services:
         MYSQL_ROOT_PASSWORD: root
       volumes:
         - ./scripts/mysql/initdb.sql:/docker-entrypoint-initdb.d/initdb.sql
+        - ./scripts/mysql/mysql.cnf:/etc/mysql/conf.d/mysql.cnf
 
     zookeeper:
       image: debezium/zookeeper
@@ -44,3 +45,39 @@ services:
         KAFKA_DELETE_TOPIC_ENABLE: "true"
       depends_on:
         - "zookeeper"
+
+    schema:
+      image: confluentinc/cp-schema-registry:3.1.1
+      depends_on:
+        - "kafka"
+      ports:
+        - "8081:8081"
+      environment:
+        SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: kafka:9092
+        SCHEMA_REGISTRY_HOST_NAME: schema
+
+    connect:
+      image: diegofbonfim/kafka-connect
+      ports:
+        - "8083:8083"
+      links:
+        - "kafka"
+        - "mysql"
+      environment:
+        CONNECT_BOOTSTRAP_SERVERS: kafka:9092
+        CONNECT_REST_PORT: 8083
+        CONNECT_GROUP_ID: "overath"
+        CONNECT_CONFIG_STORAGE_TOPIC: "connect.config"
+        CONNECT_OFFSET_STORAGE_TOPIC: "connect.offsets"
+        CONNECT_STATUS_STORAGE_TOPIC: "connect.status"
+        CONNECT_KEY_CONVERTER: "org.apache.kafka.connect.storage.StringConverter"
+        CONNECT_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+        CONNECT_INTERNAL_KEY_CONVERTER: "org.apache.kafka.connect.storage.StringConverter"
+        CONNECT_INTERNAL_VALUE_CONVERTER: "org.apache.kafka.connect.json.JsonConverter"
+        CONNECT_REST_ADVERTISED_HOST_NAME: "localhost"
+        CONNECT_INTERNAL_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+        CONNECT_INTERNAL_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+        CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+        CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+        CONNECT_LOG4J_LOGGERS: "io.debezium.connector.mysql=DEBUG,io.debezium.relational.history=DEBUG"
+        CONNECT_LOG4J_ROOT_LOGLEVEL: "WARN"
