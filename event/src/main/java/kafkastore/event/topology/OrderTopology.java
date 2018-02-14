@@ -1,7 +1,12 @@
 package kafkastore.event.topology;
 
+import io.confluent.kafka.serializers.KafkaAvroDeserializer;
+import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import kafkastore.event.Employee;
+import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
@@ -10,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.Properties;
 
+import static io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
 import static org.apache.kafka.streams.StreamsConfig.APPLICATION_ID_CONFIG;
 import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
 import static org.apache.kafka.streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG;
@@ -42,9 +48,14 @@ public class OrderTopology {
 
         streamsConfiguration.put(APPLICATION_ID_CONFIG, "kafkastore");
         streamsConfiguration.put(BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+        streamsConfiguration.put(SCHEMA_REGISTRY_URL_CONFIG, "schema:8081");
         streamsConfiguration.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         streamsConfiguration.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
 
         return streamsConfiguration;
+    }
+
+    private void some(){
+        Employee some = Employee.newBuilder().setAge(1).build();
     }
 }
