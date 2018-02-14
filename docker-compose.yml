@@ -16,6 +16,7 @@ services:
       build: event/.
       links:
         - mysql
+        - schema
       environment:
         MYSQL_DB_HOST: mysql
         MYSQL_DB_USER: root

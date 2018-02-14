@@ -1,12 +1,9 @@
 package kafkastore.event.topology;
 
-import io.confluent.kafka.serializers.KafkaAvroDeserializer;
-import io.confluent.kafka.serializers.KafkaAvroSerializer;
+import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import kafkastore.event.Employee;
-import org.apache.kafka.common.serialization.Deserializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
-import org.apache.kafka.common.serialization.Serializer;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
@@ -18,8 +15,6 @@ import java.util.Properties;
 import static io.confluent.kafka.serializers.AbstractKafkaAvroSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG;
 import static org.apache.kafka.streams.StreamsConfig.APPLICATION_ID_CONFIG;
 import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
-import static org.apache.kafka.streams.StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG;
-import static org.apache.kafka.streams.StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG;
 
 @Configuration
 public class OrderTopology {
@@ -32,9 +27,14 @@ public class OrderTopology {
 
         final KStreamBuilder builder = new KStreamBuilder();
 
-        builder.stream(stringSerde, stringSerde, "input")
-                .map((key, value)  -> new KeyValue<>("1",value))
-                .to(stringSerde, stringSerde, "output");
+        new Employee();
+
+        SpecificAvroSerde avroSerde = new SpecificAvroSerde<Employee>();
+        avroSerde.configure(getProperties(),false);
+
+        builder.stream(stringSerde, stringSerde, "debezium.store.orders")
+                .map((key, value)  -> new KeyValue<>("1",some()))
+                .to(stringSerde, avroSerde, "sink.store.orders");
 
         final KafkaStreams payloadStream = new KafkaStreams(builder, getProperties());
 
@@ -48,14 +48,19 @@ public class OrderTopology {
 
         streamsConfiguration.put(APPLICATION_ID_CONFIG, "kafkastore");
         streamsConfiguration.put(BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
-        streamsConfiguration.put(SCHEMA_REGISTRY_URL_CONFIG, "schema:8081");
-        streamsConfiguration.put(DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        streamsConfiguration.put(DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
+        streamsConfiguration.put(SCHEMA_REGISTRY_URL_CONFIG, "http://schema:8081");
 
         return streamsConfiguration;
     }
 
-    private void some(){
-        Employee some = Employee.newBuilder().setAge(1).build();
+    private Employee some(){
+
+        return Employee
+                .newBuilder()
+                .setAge(1)
+                .setFirstName("Diego")
+                .setLastName("Bonfim")
+                .setPhoneNumber("011")
+                .build();
     }
 }
