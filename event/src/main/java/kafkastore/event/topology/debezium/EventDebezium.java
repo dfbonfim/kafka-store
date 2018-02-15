@@ -1,5 +1,9 @@
 package kafkastore.event.topology.debezium;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonValue;
+
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class EventDebezium<T> {
 
     private T before;
@@ -35,9 +39,16 @@ public class EventDebezium<T> {
         UPDATED("u"),
         DELETED("d");
 
+        @JsonValue
+        public String getOp() {
+            return op;
+        }
+
         private String op;
 
         Operation(String op){ this.op = op; }
+
+
     }
 
     @Override

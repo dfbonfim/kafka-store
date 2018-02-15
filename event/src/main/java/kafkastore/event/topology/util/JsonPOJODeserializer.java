@@ -17,10 +17,14 @@ public class JsonPOJODeserializer<T> implements Deserializer<T> {
     public JsonPOJODeserializer() {
     }
 
+    public JsonPOJODeserializer(Class<T> tClass) {
+        this.tClass = tClass;
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public void configure(Map<String, ?> props, boolean isKey) {
-        tClass = (Class<T>) props.get("JsonPOJOClass");
+
     }
 
     @Override
@@ -32,7 +36,7 @@ public class JsonPOJODeserializer<T> implements Deserializer<T> {
         try {
             data = objectMapper.readValue(bytes, tClass);
         } catch (Exception e) {
-            throw new SerializationException(String.format("primeiro %s segundo %s",bytes, tClass));
+            throw new SerializationException(e);
         }
 
         return data;

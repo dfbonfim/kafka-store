@@ -26,6 +26,7 @@ import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
 public class OrderTopology {
 
     private Logger log = LoggerFactory.getLogger(OrderTopology.class);
+
     @Bean
     public boolean createToplogy(){
 
@@ -33,7 +34,7 @@ public class OrderTopology {
 
         final KStreamBuilder builder = new KStreamBuilder();
 
-        final Serde<EventDebezium<OrdersDebezium>> serdeDebezium = Serdes.serdeFrom(new JsonPOJOSerializer(), new JsonPOJODeserializer());
+        final Serde<EventDebezium<OrdersDebezium>> serdeDebezium = Serdes.serdeFrom(new JsonPOJOSerializer(), new JsonPOJODeserializer(EventDebezium.class));
 
         SpecificAvroSerde avroSerde = new SpecificAvroSerde<Employee>();
         avroSerde.configure(getProperties(),false);
