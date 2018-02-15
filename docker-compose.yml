@@ -4,10 +4,12 @@ services:
       build: api/.
       ports:
         - "8080:8080"
+        - "5005:5005"
       depends_on:
         - mysql
         - kafka
       environment:
+        JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
         MYSQL_DB_HOST: mysql
         MYSQL_DB_USER: root
         MYSQL_DB_PWD: root
@@ -17,7 +19,10 @@ services:
       links:
         - mysql
         - schema
+      ports:
+        - "5006:5006"
       environment:
+        JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006"
         MYSQL_DB_HOST: mysql
         MYSQL_DB_USER: root
         MYSQL_DB_PWD: root

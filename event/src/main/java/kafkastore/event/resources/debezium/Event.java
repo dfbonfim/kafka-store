@@ -1,10 +1,10 @@
-package kafkastore.event.topology.debezium;
+package kafkastore.event.resources.debezium;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class EventDebezium<T> {
+public class Event<T> {
 
     private T before;
     private T after;
@@ -34,6 +34,14 @@ public class EventDebezium<T> {
         this.op = op;
     }
 
+    public Boolean isDelete(){
+        return Operation.DELETED.equals(op);
+    }
+
+    public Boolean isUpdate(){
+        return Operation.UPDATED.equals(op);
+    }
+
     enum Operation {
         CREATED("c"),
         UPDATED("u"),
@@ -53,7 +61,7 @@ public class EventDebezium<T> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("EventDebezium{");
+        final StringBuilder sb = new StringBuilder("Event{");
         sb.append("before=").append(before);
         sb.append(", after=").append(after);
         sb.append(", op=").append(op);

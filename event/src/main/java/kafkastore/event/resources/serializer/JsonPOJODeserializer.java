@@ -1,5 +1,6 @@
-package kafkastore.event.topology.util;
+package kafkastore.event.resources.serializer;
 
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.SerializationException;
 import org.apache.kafka.common.serialization.Deserializer;
@@ -9,7 +10,8 @@ import java.util.Map;
 public class JsonPOJODeserializer<T> implements Deserializer<T> {
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    private Class<T> tClass;
+    private Class<T> debziumClass;
+    private Class resourceClass;
 
     /**
      * Default constructor needed by Kafka
@@ -17,8 +19,9 @@ public class JsonPOJODeserializer<T> implements Deserializer<T> {
     public JsonPOJODeserializer() {
     }
 
-    public JsonPOJODeserializer(Class<T> tClass) {
-        this.tClass = tClass;
+    public JsonPOJODeserializer(Class<T> debziumClass, Class resourceClass) {
+        this.debziumClass = debziumClass;
+        this.resourceClass = resourceClass;
     }
 
     @SuppressWarnings("unchecked")
@@ -34,7 +37,8 @@ public class JsonPOJODeserializer<T> implements Deserializer<T> {
 
         T data;
         try {
-            data = objectMapper.readValue(bytes, tClass);
+            JavaType type = objectMapper.getTypeFactory().constructParametricType(debziumClass, resourceClass);
+            data =  objectMapper.readValue(bytes, type);
         } catch (Exception e) {
             throw new SerializationException(e);
         }
