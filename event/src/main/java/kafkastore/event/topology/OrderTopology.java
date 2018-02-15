@@ -2,11 +2,17 @@ package kafkastore.event.topology;
 
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import kafkastore.event.Employee;
+import kafkastore.event.topology.debezium.EventDebezium;
+import kafkastore.event.topology.debezium.OrdersDebezium;
+import kafkastore.event.topology.util.JsonPOJODeserializer;
+import kafkastore.event.topology.util.JsonPOJOSerializer;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,7 +25,7 @@ import static org.apache.kafka.streams.StreamsConfig.BOOTSTRAP_SERVERS_CONFIG;
 @Configuration
 public class OrderTopology {
 
-
+    private Logger log = LoggerFactory.getLogger(OrderTopology.class);
     @Bean
     public boolean createToplogy(){
 
@@ -27,13 +33,15 @@ public class OrderTopology {
 
         final KStreamBuilder builder = new KStreamBuilder();
 
-        new Employee();
+        final Serde<EventDebezium<OrdersDebezium>> serdeDebezium = Serdes.serdeFrom(new JsonPOJOSerializer(), new JsonPOJODeserializer());
 
         SpecificAvroSerde avroSerde = new SpecificAvroSerde<Employee>();
         avroSerde.configure(getProperties(),false);
 
-        builder.stream(stringSerde, stringSerde, "debezium.store.orders")
-                .map((key, value)  -> new KeyValue<>("1",some()))
+        builder.stream(stringSerde, serdeDebezium, "debezium.store.orders")
+                .map((key, value)  -> { log.info("Debezium event is [{}]", value);
+                                        return new KeyValue<>("1",some());
+                                        })
                 .to(stringSerde, avroSerde, "sink.store.orders");
 
         final KafkaStreams payloadStream = new KafkaStreams(builder, getProperties());
