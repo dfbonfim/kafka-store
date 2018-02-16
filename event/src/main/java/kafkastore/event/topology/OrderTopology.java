@@ -1,7 +1,6 @@
 package kafkastore.event.topology;
 
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
-import kafkastore.event.Employee;
 import kafkastore.event.mapper.OrderEventMapper;
 import kafkastore.event.resources.debezium.EventDebezium;
 import kafkastore.event.resources.debezium.OrderDebezium;
@@ -42,7 +41,7 @@ public class OrderTopology {
         final Serde<EventDebezium<OrderDebezium>> serdeInput =
                 Serdes.serdeFrom(new JsonPOJOSerializer(), new JsonPOJODeserializer(EventDebezium.class, OrderDebezium.class));
 
-        SpecificAvroSerde serdeOutput = new SpecificAvroSerde<Employee>();
+        SpecificAvroSerde serdeOutput = new SpecificAvroSerde();
         serdeOutput.configure(getProperties(),false);
 
         builder.stream(stringSerde, serdeInput, "debezium.store.orders")
@@ -71,16 +70,5 @@ public class OrderTopology {
         streamsConfiguration.put(SCHEMA_REGISTRY_URL_CONFIG, "http://schema:8081");
 
         return streamsConfiguration;
-    }
-
-    private Employee some(){
-
-        return Employee
-                .newBuilder()
-                .setAge(1)
-                .setFirstName("Diego")
-                .setLastName("Bonfim")
-                .setPhoneNumber("011")
-                .build();
     }
 }
