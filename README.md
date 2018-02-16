@@ -1,8 +1,18 @@
 # kafka-store
 
+Api
 ```
 ./gradlew build && docker-compose up --build api
 ```
+
+Event
+```
+./gradlew build && docker-compose up --build event
+```
+
+
+
+## Kafka
 
 ### Consumer
 ```

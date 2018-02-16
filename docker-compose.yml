@@ -4,10 +4,12 @@ services:
       build: api/.
       ports:
         - "8080:8080"
+        - "5005:5005"
       depends_on:
         - mysql
         - kafka
       environment:
+        JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005"
         MYSQL_DB_HOST: mysql
         MYSQL_DB_USER: root
         MYSQL_DB_PWD: root
@@ -16,7 +18,11 @@ services:
       build: event/.
       links:
         - mysql
+        - schema
+      ports:
+        - "5006:5006"
       environment:
+        JAVA_TOOL_OPTIONS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5006"
         MYSQL_DB_HOST: mysql
         MYSQL_DB_USER: root
         MYSQL_DB_PWD: root
@@ -53,7 +59,7 @@ services:
       ports:
         - "8081:8081"
       environment:
-        SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: kafka:9092
+        SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
         SCHEMA_REGISTRY_HOST_NAME: schema
 
     connect:

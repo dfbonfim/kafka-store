@@ -19,7 +19,7 @@ public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
 
-    @PostMapping("/")
+    @PostMapping("/orders")
     public String createOrder(@RequestBody OrderResource orderResource) {
         Order order = new Order();
         order.setDescription(orderResource.getDescription());

@@ -11,6 +11,7 @@ curl -i -X POST \
       "name":"connector_mysql",
       "connector.class":"io.debezium.connector.mysql.MySqlConnector",
       "tasks.max":"1",
+      "decimal.handling.mode": "double",
       "database.hostname":"mysql",
       "database.port":"3306",
       "database.user":"root",

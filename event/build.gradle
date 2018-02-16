@@ -1,10 +1,16 @@
 buildscript {
-    ext { springBootVersion = '1.5.9.RELEASE' }
-    dependencies { classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}") }
+    repositories {
+        jcenter()
+    }
+
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.9.RELEASE")
+        classpath "com.commercehub.gradle.plugin:gradle-avro-plugin:0.14.0"
+    }
 }
 
 apply plugin: 'org.springframework.boot'
-
+apply plugin: "com.commercehub.gradle.plugin.avro"
 
 repositories {
     maven {
@@ -14,7 +20,13 @@ repositories {
 
 dependencies {
     compile project(':domain')
+
     compile 'org.apache.kafka:kafka-streams:0.11.0.0-cp1'
+    compile 'org.apache.avro:avro:1.8.2'
+    compile 'io.confluent:kafka-avro-serializer:4.0.0'
+    compile 'io.confluent:kafka-streams-avro-serde:4.0.0'
+
+    compile 'org.modelmapper:modelmapper:1.1.0'
 }
 
 jar {
