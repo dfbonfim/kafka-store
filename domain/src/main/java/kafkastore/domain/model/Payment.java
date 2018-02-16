@@ -73,7 +73,6 @@ public class Payment {
         sb.append(", date=").append(date);
         sb.append(", status=").append(status);
         sb.append(", total=").append(total);
-        sb.append(", order=").append(order);
         sb.append('}');
         return sb.toString();
     }

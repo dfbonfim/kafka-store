@@ -1,4 +1,4 @@
-package kafkastore.event.resources.serializer;
+package kafkastore.event.resource.serializer;
 
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;

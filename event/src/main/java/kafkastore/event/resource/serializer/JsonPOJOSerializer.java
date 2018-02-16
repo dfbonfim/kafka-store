@@ -1,4 +1,4 @@
-package kafkastore.event.resources.serializer;
+package kafkastore.event.resource.serializer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.common.errors.SerializationException;

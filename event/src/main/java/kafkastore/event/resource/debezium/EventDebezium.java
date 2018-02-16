@@ -1,4 +1,4 @@
-package kafkastore.event.resources.debezium;
+package kafkastore.event.resource.debezium;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;

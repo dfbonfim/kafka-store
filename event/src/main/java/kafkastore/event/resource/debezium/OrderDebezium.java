@@ -1,4 +1,4 @@
-package kafkastore.event.resources.debezium;
+package kafkastore.event.resource.debezium;
 
 import java.math.BigDecimal;
 
