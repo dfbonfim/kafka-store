@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javax.transaction.Transactional;
+
 @Component
 public class OrderEventMapper {
 
@@ -21,6 +23,7 @@ public class OrderEventMapper {
 
     private ModelMapper modelMapper = new ModelMapper();
 
+    @Transactional
     public OrderAvro map(EventDebezium<OrderDebezium> event){
         log.info("Mapping Order [{}]", event.getAfter().getId());
 

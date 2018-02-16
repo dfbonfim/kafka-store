@@ -1,15 +1,11 @@
 {
    "namespace":"kafkastore.event",
    "type":"record",
-   "name":"OrderAvro",
+   "name":"PaymentAvro",
    "fields":[
       {
          "name":"id",
          "type":"int"
-      },
-      {
-         "name":"description",
-         "type":"string"
       },
       {
          "name":"status",
@@ -20,14 +16,8 @@
          "type":"long"
       },
       {
-         "name":"payments",
-         "type":[
-            "null",
-            {
-               "type":"array",
-               "items":"PaymentAvro"
-            }
-         ]
+         "name":"date",
+         "type":"long"
       }
    ]
 }
