@@ -59,4 +59,15 @@ public class Order {
     public enum Status {
         CREATED, APROVED, CANCELED;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Order{");
+        sb.append("id=").append(id);
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", total=").append(total);
+        sb.append(", status=").append(status);
+        sb.append('}');
+        return sb.toString();
+    }
 }

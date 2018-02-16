@@ -2,8 +2,9 @@ package kafkastore.event.topology;
 
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import kafkastore.event.Employee;
-import kafkastore.event.resources.debezium.Event;
-import kafkastore.event.resources.debezium.Order;
+import kafkastore.event.mapper.OrderEventMapper;
+import kafkastore.event.resources.debezium.EventDebezium;
+import kafkastore.event.resources.debezium.OrderDebezium;
 import kafkastore.event.resources.serializer.JsonPOJODeserializer;
 import kafkastore.event.resources.serializer.JsonPOJOSerializer;
 import org.apache.kafka.common.serialization.Serde;
@@ -13,6 +14,7 @@ import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.KStreamBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -28,14 +30,17 @@ public class OrderTopology {
 
     private Logger log = LoggerFactory.getLogger(OrderTopology.class);
 
+    @Autowired
+    private OrderEventMapper orderEventMapper;
+
     @Bean
     public boolean createToplogy(){
         final Serde<String> stringSerde = Serdes.String();
 
         final KStreamBuilder builder = new KStreamBuilder();
 
-        final Serde<Event<Order>> serdeInput =
-                Serdes.serdeFrom(new JsonPOJOSerializer(), new JsonPOJODeserializer(Event.class, Order.class));
+        final Serde<EventDebezium<OrderDebezium>> serdeInput =
+                Serdes.serdeFrom(new JsonPOJOSerializer(), new JsonPOJODeserializer(EventDebezium.class, OrderDebezium.class));
 
         SpecificAvroSerde serdeOutput = new SpecificAvroSerde<Employee>();
         serdeOutput.configure(getProperties(),false);
@@ -43,7 +48,7 @@ public class OrderTopology {
         builder.stream(stringSerde, serdeInput, "debezium.store.orders")
                 .filter((key, event) -> !event.isDelete())
                 .filter((key, event) -> IsNewEvent(event))
-                .map((key, value)  -> new KeyValue<>("1",some()))
+                .map((key, value)  -> new KeyValue<>(key, orderEventMapper.map(value)))
                 .to(stringSerde, serdeOutput, "sink.store.orders");
 
         final KafkaStreams payloadStream = new KafkaStreams(builder, getProperties());
@@ -52,7 +57,8 @@ public class OrderTopology {
         return false;
     }
 
-    private boolean IsNewEvent(Event<Order> event) {
+    //Avoid duplicated events
+    private boolean IsNewEvent(EventDebezium<OrderDebezium> event) {
         return !(event.isUpdate()
                 && Objects.equals(event.getBefore().getStatus(),event.getAfter().getStatus()));
     }

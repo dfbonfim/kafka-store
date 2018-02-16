@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 @JsonIgnoreProperties(ignoreUnknown=true)
-public class Event<T> {
+public class EventDebezium<T> {
 
     private T before;
     private T after;
@@ -61,7 +61,7 @@ public class Event<T> {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Event{");
+        final StringBuilder sb = new StringBuilder("EventDebezium{");
         sb.append("before=").append(before);
         sb.append(", after=").append(after);
         sb.append(", op=").append(op);

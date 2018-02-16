@@ -1,0 +1,19 @@
+{
+   "namespace":"kafkastore.event",
+   "type":"record",
+   "name":"OrderAvro",
+   "fields":[
+      {
+         "name":"description",
+         "type":"string"
+      },
+      {
+         "name": "status",
+         "type": "string"
+      },
+      {
+         "name": "total",
+         "type": "long"
+      }
+   ]
+}

@@ -2,7 +2,7 @@ package kafkastore.event.resources.debezium;
 
 import java.math.BigDecimal;
 
-public class Order {
+public class OrderDebezium {
     private Long id;
     private String description;
     private String status;
@@ -42,7 +42,7 @@ public class Order {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Order{");
+        final StringBuilder sb = new StringBuilder("OrderDebezium{");
         sb.append("id=").append(id);
         sb.append(", description='").append(description).append('\'');
         sb.append(", status='").append(status).append('\'');
