@@ -1,13 +1,9 @@
 package kafkastore.domain.model;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "orders")
@@ -22,7 +18,10 @@ public class Order {
     private BigDecimal total;
 
     @Enumerated(EnumType.STRING)
-    private Status status;
+    private OrderStatus status;
+
+    @OneToMany(mappedBy = "order", cascade=CascadeType.ALL)
+    private List<Payment> payments = new ArrayList<>();
 
     public long getId() {
         return id;
@@ -48,15 +47,27 @@ public class Order {
         this.total = total;
     }
 
-    public Status getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
-    public enum Status {
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
+    public void addPayment(Payment payment){
+        payments.add(payment);
+    }
+
+    public enum OrderStatus {
         CREATED, APROVED, CANCELED;
     }
 
