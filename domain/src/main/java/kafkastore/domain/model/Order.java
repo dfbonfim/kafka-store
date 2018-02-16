@@ -78,6 +78,7 @@ public class Order {
         sb.append(", description='").append(description).append('\'');
         sb.append(", total=").append(total);
         sb.append(", status=").append(status);
+        sb.append(", payments=").append(payments);
         sb.append('}');
         return sb.toString();
     }

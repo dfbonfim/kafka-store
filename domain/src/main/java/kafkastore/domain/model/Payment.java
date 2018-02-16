@@ -66,4 +66,15 @@ public class Payment {
         CREATED, APROVED, FRAUD, CANCELED;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Payment{");
+        sb.append("id=").append(id);
+        sb.append(", date=").append(date);
+        sb.append(", status=").append(status);
+        sb.append(", total=").append(total);
+        sb.append(", order=").append(order);
+        sb.append('}');
+        return sb.toString();
+    }
 }
